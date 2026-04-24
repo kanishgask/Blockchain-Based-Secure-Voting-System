@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Blockchain Voting</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+<h1>Secure Blockchain Voting</h1>
+
+<input
+id="voterId"
+placeholder="Enter Voter ID"
+>
+
+<select id="candidate">
+<option>Alice</option>
+<option>Bob</option>
+<option>Charlie</option>
+</select>
+
+<button onclick="castVote()">
+Vote
+</button>
+
+<button onclick="showResults()">
+Results
+</button>
+
+<button onclick="validateChain()">
+</button>
+
+<div id="output"></div>
+
+</div>
+
+<script>
+
+async function castVote(){
+
+let voter=
+ document.getElementById(
+ 'voterId'
+ ).value;
+
+let candidate=
+ document.getElementById(
+ 'candidate'
+ ).value;
+
+let res=await fetch(
+`http://localhost:8080/api/vote?voterId=${voter}&candidate=${candidate}`,
+{
+method:'POST'
+}
+);
+
+let data=await res.text();
+
+document.getElementById(
+'output'
+).innerHTML=data;
+}
+
+
+async function showResults(){
+
+let res=
+await fetch(
+'http://localhost:8080/api/results'
+);
+
+let data=
+await res.json();
+
+let html="<h2>Results</h2>";
+
+for(let c in data){
+html+=c+" : "+data[c]+
+" votes <br>";
+}
+
+document.getElementById(
+'output'
+).innerHTML=html;
+}
+
+
+async function validateChain(){
+
+let res=
+await fetch(
+'http://localhost:8080/api/validate'
+);
+
+let data=
+await res.text();
+
+document.getElementById(
+'output'
+).innerHTML=data;
+}
+
+</script>
+
+</body>
+</html>
